@@ -1,37 +1,95 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Protected Page</title>
+    <title>Truy cập Liên kết</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        /* Style cho popup */
+        .modal {
+            display: none; /* Ẩn modal theo mặc định */
+            position: fixed; 
+            z-index: 1; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0, 0, 0, 0.5); /* Nền tối */
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            width: 300px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-    <div id="login">
-        <h2>Enter Password</h2>
-        <input type="password" id="passwordInput" placeholder="Password">
-        <button onclick="authenticate()">Submit</button>
-        <p id="error" style="color:red;"></p>
+
+<div class="container">
+    <h2>Chào mừng bạn đến với trang!</h2>
+    <button onclick="showModal()">Nhập Mật Khẩu</button>
+</div>
+
+<!-- Popup Modal -->
+<div id="passwordModal" class="modal">
+    <div class="modal-content">
+        <h2>Nhập Mật Khẩu</h2>
+        <input type="password" id="password" placeholder="Mật khẩu" />
+        <button onclick="checkPassword()">Xác nhận</button>
+        <button onclick="closeModal()">Đóng</button>
     </div>
+</div>
 
-    <script>
-        async function authenticate() {
-            const password = document.getElementById('passwordInput').value;
-            const hashedPassword = await hashPassword(password);
-            const correctHashedPassword = "9f7466c7235e02fe90bfc449762c15c07a3bad508d29faefa868163c9432d50b";
+<script>
+    // Đặt mật khẩu và liên kết ở đây
+    const correctPassword = "matkhau123"; // Đổi mật khẩu ở đây
+    const redirectLink = "https://example.com"; // Đổi liên kết ở đây
 
-            if (hashedPassword === correctHashedPassword) {
-                window.location.href = "https://1drv.ms/w/s!AjVMAzF2QcwYcxMMaRI81CgE4cs?e=Y75na6"; // Redirect URL
-            } else {
-                document.getElementById('error').textContent = "Incorrect password.";
-            }
+    function showModal() {
+        document.getElementById('passwordModal').style.display = 'flex'; // Hiện popup
+    }
+
+    function closeModal() {
+        document.getElementById('passwordModal').style.display = 'none'; // Ẩn popup
+    }
+
+    function checkPassword() {
+        const inputPassword = document.getElementById('password').value;
+
+        if (inputPassword === correctPassword) {
+            window.location.href = redirectLink;
+        } else {
+            alert("Mật khẩu không đúng. Vui lòng thử lại.");
         }
+    }
 
-        async function hashPassword(password) {
-            const encoder = new TextEncoder();
-            const data = encoder.encode(password);
-            const hash = await crypto.subtle.digest('SHA-256', data);
-            return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+    // Đóng modal nếu người dùng nhấn bên ngoài modal
+    window.onclick = function(event) {
+        const modal = document.getElementById('passwordModal');
+        if (event.target === modal) {
+            closeModal();
         }
-    </script>
+    }
+</script>
+
 </body>
 </html>
