@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protected Page</title>
+</head>
+<body>
+    <div id="login">
+        <h2>Enter Password</h2>
+        <input type="password" id="passwordInput" placeholder="Password">
+        <button onclick="authenticate()">Submit</button>
+        <p id="error" style="color:red;"></p>
+    </div>
+
+    <script>
+        async function authenticate() {
+            const password = document.getElementById('passwordInput').value;
+            const hashedPassword = await hashPassword(password);
+            const correctHashedPassword = "9f7466c7235e02fe90bfc449762c15c07a3bad508d29faefa868163c9432d50b";
+
+            if (hashedPassword === correctHashedPassword) {
+                window.location.href = "https://example.com"; // Redirect URL
+            } else {
+                document.getElementById('error').textContent = "Incorrect password.";
+            }
+        }
+
+        async function hashPassword(password) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(password);
+            const hash = await crypto.subtle.digest('SHA-256', data);
+            return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+    </script>
+</body>
+</html>
